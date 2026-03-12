@@ -1,0 +1,48 @@
+# === Visual Studio Temporary Files ===
+.vs/
+[Bb]in/
+[Oo]bj/
+*.exe
+*.pdb
+*.ilk
+*.aps
+*.ncb
+*.user
+*.suo
+*.sln.docu
+*.spec
+*.sqlproj.user
+*.userosscache
+*.sln.idsymb
+*.opensdf
+*.sdf
+*.cache
+*.pot
+
+# === Build Outputs ===
+# Ignorujemy pliki obiektowe i biblioteki statyczne
+*.obj
+*.lib
+*.dll
+*.exp
+*.res
+*.pch
+*.idb
+*.tlog
+*.lastbuildstate
+
+# === Windows OS Specific ===
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# === C/C++ Specific ===
+# Jeśli używasz narzędzi typu CMake lub vcpkg
+out/
+build/
+vcpkg_installed/
+
+# === Backup & Log Files ===
+*.bak
+*.log
+*.tmp
