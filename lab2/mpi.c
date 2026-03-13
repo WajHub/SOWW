@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include <math.h>
 #define PRECISION 0.000001
-#define RANGESIZE 100
+#define RANGESIZE 5
 #define DATA 0
 #define RESULT 1
 #define FINISH 2
@@ -45,7 +45,7 @@ double countTwinPrimes(long a, long b, long upper_limit) {
 
     if(previous_is_prime==1) {
       long next_number = b + 1;
-      if(upper_limit % 2 == 0) {
+      if(next_number % 2 == 0) {
         next_number++;
       }
       if(next_number<= upper_limit && isPrime(next_number)){
