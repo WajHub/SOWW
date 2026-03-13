@@ -21,17 +21,46 @@ int isPrime(long N) {
     return 1;
 }
 
-double countTwinPrimes(double a, double b) {
+double countTwinPrimes(long a, long b, long upper_limit) {
     double count = 0;
-    long start = (long)a;
-    long end = (long)b;
-    
-    for (long i = start; i <= end; i++) {
-        if (isPrime(i) && isPrime(i + 2)) {
-          // printf("Test: %ld %ld \n", i, i+2);
-          count++;
+    int previous_is_prime = 0;
+    // printf("Ranges: %ld %ld \n", a, b);
+
+    if(a%2== 0) a++;
+    for (long i = a; i <= b; i+=2) {
+        if (isPrime(i)) {
+          if(previous_is_prime == 1) {
+            count++;
+            // printf(" ---- Twin Primes: %ld %ld \n", i, i-2);
+          }
+          else {
+            previous_is_prime = 1;
+          }
+          
+        }
+        else{
+          previous_is_prime = 0;
         }
     }
+
+    if(previous_is_prime==1) {
+      long next_number = b + 1;
+      if(upper_limit % 2 == 0) {
+        next_number++;
+      }
+      if(next_number<= upper_limit && isPrime(next_number)){
+        count++;
+      }
+    }
+    return count;
+
+    // if(a%2== 0) a++;
+    // for (long i = a; i <= b; i+=2) {
+    //     if (isPrime(i) && isPrime(i + 2)) {
+    //       printf(" ---- Twin Primes: %ld %ld \n", i, i+2);
+    //       count++;
+    //     }
+    // }
     return count;
 }
 
@@ -81,7 +110,7 @@ int main(int argc, char **argv)
     // first distribute some ranges to all slaves
     for (i = 1; i < proccount; i++)
     {
-      range[1] = range[0] + RANGESIZE;
+      range[1] = range[0] + RANGESIZE - 1;
       MPI_Send(range, 2, MPI_DOUBLE, i, DATA, MPI_COMM_WORLD); // send it to process i
       sentcount++;
       range[0] = range[1] + 1;
@@ -92,7 +121,7 @@ int main(int argc, char **argv)
       MPI_Recv(&resulttemp, 1, MPI_DOUBLE, MPI_ANY_SOURCE, RESULT, MPI_COMM_WORLD, &status);
       result += resulttemp;
       // check the sender and send some more data
-      range[1] = range[0] + RANGESIZE;
+      range[1] = range[0] + RANGESIZE - 1;
       if (range[1] > b)
         range[1] = b;
       MPI_Send(range, 2, MPI_DOUBLE, status.MPI_SOURCE, DATA,
@@ -125,7 +154,7 @@ int main(int argc, char **argv)
       {
         MPI_Recv(range, 2, MPI_DOUBLE, 0, DATA, MPI_COMM_WORLD, &status);
         // compute my part
-        resulttemp = countTwinPrimes(range[0], range[1]);
+        resulttemp = countTwinPrimes(range[0], range[1], b);
         // send the result back
         MPI_Send(&resulttemp, 1, MPI_DOUBLE, 0, RESULT, MPI_COMM_WORLD);
       }
