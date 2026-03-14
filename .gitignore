@@ -46,3 +46,15 @@ vcpkg_installed/
 *.bak
 *.log
 *.tmp
+
+# === Visual Studio Code Specific ===
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# === C++ IntelliSense & Browsing Database (VS Code) ===
+.history/
+.ionide/
