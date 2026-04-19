@@ -67,7 +67,7 @@ double countTwinPrimes(long a, long b, long upper_limit)
   return count;
 }
 
-void work(long start, long step, long upper_limit)
+void work(long start, long step, long upper_limit, int myrank)
 {
   double local_result = 0;
 
@@ -84,7 +84,14 @@ void work(long start, long step, long upper_limit)
       // printf(" ---- Twin Primes: %d %d \n", i, (i + 2));
     }
   }
-  MPI_Send(&local_result, 1, MPI_DOUBLE, 0, RESULT, MPI_COMM_WORLD);
+ if (myrank == 0) {
+    // Proces 0 nie wysyła do siebie, on po prostu wypisze swój wynik później
+    // lub przekaże go do zmiennej globalnej.
+    printf("\nProcess 0 finished local work: %f\n", local_result);
+  } else {
+    // Tylko procesy o rank > 0 wysyłają dane do Mastera
+    MPI_Send(&local_result, 1, MPI_DOUBLE, 0, RESULT, MPI_COMM_WORLD);
+  }
 }
 
 
@@ -138,7 +145,7 @@ int main(int argc, char **argv)
   long upper_limit = inputArgument;
   double total_result = 0;
 
-  work(start, step, upper_limit);
+  work(start, step, upper_limit, myrank);
 
   // synchronize/finalize your computations
   if (!myrank)

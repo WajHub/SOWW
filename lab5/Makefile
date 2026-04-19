@@ -15,7 +15,7 @@ main: mpi+openmp.c
 	${MPICC} ${CFLAGS} ${OMPFLAGS} $< -o openmp+mpi ${LIBS}
 
 run:
-	mpirun -bind-to none -np 2 ./openmp+mpi $(RUN_ARGS)
+	mpirun --hostfile machinefile -bind-to none -np 2 ./openmp+mpi $(RUN_ARGS)
 
 clean:
 	rm openmp+mpi
